@@ -1,9 +1,11 @@
 
-annotations
-generated
-train
-train_annotation
-val2017
-validation
-validation_annotation
+venv
+
+v0/annotations
+v0/generated
+v0/train
+v0/train_annotation
+v0/val2017
+v0/validation
+v0/validation_annotation
 
