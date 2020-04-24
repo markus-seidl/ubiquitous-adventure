@@ -53,7 +53,7 @@ class LabelInputGenerator(keras.utils.Sequence):
         """Generates data containing batch_size samples  # X : (n_samples, *dim, n_channels)"""
         # Initialization
         X = np.empty((batch_size, *self.dim))
-        y = np.empty((batch_size), dtype=int)
+        y = np.zeros((batch_size, self.n_classes), dtype=int)
 
         # Generate data
         for i, id in enumerate(indexes):
@@ -64,7 +64,10 @@ class LabelInputGenerator(keras.utils.Sequence):
             temp = cv2.resize(img, dsize=(self.dim[0], self.dim[1]), interpolation=cv2.INTER_NEAREST)
             X[i,] = temp / 255  # convert to 0..1
 
-            # Store class
-            y[i] = header.label[4]
+            # Collect all classes that are found here
+            for ii in range(int(header.label[0]), len(header.label), int(header.label[1])):
+                y[i, int(header.label[ii])] = 1
 
-        return X, keras.utils.to_categorical(y, num_classes=self.n_classes)
+            # y[i] = header.label[4]
+
+        return X, y  # keras.utils.to_categorical(y, num_classes=self.n_classes)

@@ -1,6 +1,9 @@
 
 venv
 
+v1/*.zip
+v1/data
+
 v0/annotations
 v0/generated
 v0/train
