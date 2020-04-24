@@ -1,4 +1,4 @@
-from keras import backend as K, Sequential
+from keras import backend
 from keras.layers import Conv2D, ZeroPadding2D, Activation, Input, concatenate, ReLU, DepthwiseConv2D, Dense, Dropout
 from keras.models import Model
 from keras.layers.normalization import BatchNormalization
@@ -17,14 +17,16 @@ def create_model(input_shape, outputs):
 
     X_input = Input(input_shape)
     x = _conv_block(X_input, 32, alpha, strides=(2, 2))
-    #x = _depthwise_conv_block(x, 64, alpha, depth_multiplier, block_id=1)
-    #x = _depthwise_conv_block(x, 128, alpha, depth_multiplier,
-    #                          strides=(2, 2), block_id=2)
-    #x = _depthwise_conv_block(x, 128, alpha, depth_multiplier, block_id=3)
+    x = _depthwise_conv_block(x, 64, alpha, depth_multiplier, block_id=1)
+    x = _depthwise_conv_block(x, 128, alpha, depth_multiplier, strides=(2, 2), block_id=2)
+    x = _depthwise_conv_block(x, 128, alpha, depth_multiplier, block_id=3)
+    x = _depthwise_conv_block(x, 256, alpha, depth_multiplier, strides=(2, 2), block_id=4)
+    x = _depthwise_conv_block(x, 256, alpha, depth_multiplier, block_id=5)
+    x = _depthwise_conv_block(x, 512, alpha, depth_multiplier, strides=(2, 2), block_id=6)
 
     x = GlobalAveragePooling2D()(x)
     x = Dropout(dropout, name='dropout')(x)
-    x = Dense(outputs, activation='sigmoid')
+    x = Dense(outputs, activation='sigmoid')(x)
 
     return Model(inputs=X_input, outputs=x, name='simplemobilenet')
 
