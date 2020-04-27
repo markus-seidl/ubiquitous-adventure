@@ -28,7 +28,7 @@ def create_model(input_shape, outputs):
     x = Dropout(dropout, name='dropout')(x)
     x = Dense(outputs, activation='sigmoid')(x)
 
-    return Model(inputs=X_input, outputs=x, name='simplemobilenet')
+    return Model(inputs=X_input, outputs=x, name='simplemobilenet').save()
 
 
 def _conv_block(inputs, filters, alpha, kernel=(3, 3), strides=(1, 1)):
@@ -107,7 +107,7 @@ def _depthwise_conv_block(inputs, pointwise_conv_filters, alpha,
                         name='conv_dw_%d' % block_id)(x)
     x = BatchNormalization(
         axis=channel_axis, name='conv_dw_%d_bn' % block_id)(x)
-    x = ReLU(6., name='conv_dw_%d_relu' % block_id)(x)
+    #x = ReLU(6., name='conv_dw_%d_relu' % block_id)(x)
 
     x = Conv2D(pointwise_conv_filters, (1, 1),
                padding='same',
@@ -116,4 +116,5 @@ def _depthwise_conv_block(inputs, pointwise_conv_filters, alpha,
                name='conv_pw_%d' % block_id)(x)
     x = BatchNormalization(axis=channel_axis,
                            name='conv_pw_%d_bn' % block_id)(x)
-    return ReLU(6., name='conv_pw_%d_relu' % block_id)(x)
+    # ReLU(6., name='conv_pw_%d_relu' % block_id)(x)
+    return x
